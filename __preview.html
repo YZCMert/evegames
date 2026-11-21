@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EveGames preview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div id="confetti-layer"></div>
+  <main id="app"></main>
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/wheel.js"></script>
+  <script src="js/games/match.js"></script>
+  <script src="js/games/bingo.js"></script>
+  <script src="js/games/crossword.js"></script>
+  <script src="js/games/word.js"></script>
+  <script src="js/games/observe.js"></script>
+  <script src="js/games/act.js"></script>
+
+  <script src="js/data3d.js"></script>
+  <script src="js/lessons.js"></script>
+  <script src="js/lessons/review.js"></script>
+  <script src="js/lessons/m1.js"></script>
+  <script src="js/lessons/m2.js"></script>
+  <script src="js/games3d/models.js"></script>
+  <script src="js/games3d/heist.js"></script>
+  <script src="js/games3d/tower.js"></script>
+  <script src="js/games3d/escape.js"></script>
+  <script src="js/games3d/city.js"></script>
+  <script src="js/games3d/quiz.js"></script>
+  <script src="js/games3d/longboat.js"></script>
+  <script src="js/games3d/tug.js"></script>
+
+  <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+  <script type="module" src="js/3d/scenes.js"></script>
+  <script>
+    // Dev-only harness: /__preview.html?screen=wheel|match|bingo|crossword|…&menu=1
+    // Any uncaught error is stamped onto <body> so the browser test can see it.
+    window.addEventListener('error', function (e) {
+      document.body.setAttribute('data-error', e.message || 'error');
+    });
+    window.addEventListener('unhandledrejection', function (e) {
+      document.body.setAttribute('data-error', 'unhandled rejection: ' + e.reason);
+    });
+    var _err = console.error;
+    console.error = function () {
+      document.body.setAttribute('data-error', Array.prototype.join.call(arguments, ' '));
+      _err.apply(console, arguments);
+    };
+
+    window.addEventListener('DOMContentLoaded', function () {
+    var q = new URLSearchParams(location.search);
+    LW.boot();
+    LW.state.teams = [];
+    LW.addTeam('Lions'); LW.addTeam('Dolphins'); LW.addTeam('Eagles');
+    LW.state.teams[0].score = 48; LW.state.teams[1].score = 73; LW.state.teams[2].score = 31;
+    LW.state.packIds = (q.get('packs') || 'farm,food').split(',');
+    LW.state.settings.difficulty = q.get('diff') || 'normal';
+    LW.state.mode = q.get('mode') || 'classic';
+    LW.state.lesson = { level: q.get('level') || 'b1', picks: {} };
+    if (q.get('parts')) LW.state.lesson.picks[LW.state.lesson.level] = q.get('parts').split(',');
+    LW.state.settings.sound = false;
+    LW.state.settings.speech = false;
+
+    var s = q.get('screen') || 'wheel';
+    if (s === 'setup') LW.screens.setup();
+    else if (s === 'wheel') LW.screens.wheel();
+    else if (s === 'picker') LW.screens.gamePicker();
+    else if (s === 'final') LW.screens.final();
+    else if (s === 'scoreboard') LW.screens.scoreboard();
+    else if (s === 'result') LW.screens.result(LW.games[0], 64, 'All 6 pairs! +24 time bonus.');
+    else if (s === 'teamresult') LW.screens.resultTeams(LW.games.filter(function (x) { return x.id === 'longboat'; })[0], LW.state.teams.map(function (t, i) { return { id: t.id, name: t.name, avatar: t.avatar, color: t.color, points: [65, 40, 25][i], note: ['1st · 5 correct · reached the finish', '2nd · 3 correct · 7 / 9 stretches', '3rd · 2 correct · 5 / 9 stretches'][i] }; }), 'Race over!');
+    else if (s === 'intro') LW.screens.intro(LW.games.filter(function (g) { return g.id === (q.get('game') || 'bingo'); })[0]);
+    else {
+      var g = LW.games.filter(function (x) { return x.id === s; })[0];
+      if (g) LW.screens.play(g);
+    }
+
+    if (q.get('menu')) {
+      var mb = document.querySelector('.menu-btn');
+      if (mb) mb.click();
+    }
+    document.body.setAttribute('data-boot', 'ok');
+    });
+  </script>
+</body>
+</html>

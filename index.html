@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>EveGames by T. Eve — Maryvit School English Games</title>
+  <meta name="description" content="EveGames by T. Eve — English games for Maryvit School classes: 11 word games and 6 3D games that follow the M.1 / M.2 lessons.">
+  <meta name="theme-color" content="#24247f">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <link rel="icon" type="image/png" href="assets/maryvit-crest-64.png">
+  <link rel="apple-touch-icon" href="assets/maryvit-crest.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div id="confetti-layer" aria-hidden="true"></div>
+  <main id="app"></main>
+
+  <noscript>
+    <p style="text-align:center;padding:40px">EveGames needs JavaScript. Please enable it in your browser.</p>
+  </noscript>
+
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/wheel.js"></script>
+
+  <script src="js/games/match.js"></script>
+  <script src="js/games/bingo.js"></script>
+  <script src="js/games/crossword.js"></script>
+  <script src="js/games/word.js"></script>
+  <script src="js/games/observe.js"></script>
+  <script src="js/games/act.js"></script>
+
+  <script src="js/data3d.js"></script>
+  <script src="js/lessons.js"></script>
+  <script src="js/lessons/review.js"></script>
+  <script src="js/lessons/m1.js"></script>
+  <script src="js/lessons/m2.js"></script>
+  <script src="js/games3d/models.js"></script>
+  <script src="js/games3d/heist.js"></script>
+  <script src="js/games3d/tower.js"></script>
+  <script src="js/games3d/escape.js"></script>
+  <script src="js/games3d/city.js"></script>
+  <script src="js/games3d/quiz.js"></script>
+  <script src="js/games3d/longboat.js"></script>
+  <script src="js/games3d/tug.js"></script>
+
+  <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+  <script type="module" src="js/3d/scenes.js"></script>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      LW.boot();
+      // Unlock audio + speech on the very first user gesture (mobile policy).
+      var unlock = function () {
+        LW.sound.click();
+        if ('speechSynthesis' in window) window.speechSynthesis.getVoices();
+        document.removeEventListener('pointerdown', unlock);
+      };
+      document.addEventListener('pointerdown', unlock);
+    });
+  </script>
+</body>
+</html>
